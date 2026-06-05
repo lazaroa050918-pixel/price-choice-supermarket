@@ -249,6 +249,9 @@
     /* PAGE SECTIONS - hidden by default, shown via menu */
     .page-section { display: none; }
     .page-section.active { display: block; }
+    /* HOME SECTIONS - visible on home, hidden when a page-section is active */
+    .home-section { display: block; }
+    .home-section.hidden { display: none; }
     .nav-logo { cursor: pointer; }
     /* active nav link highlight */
     .ham-dropdown ul li a.nav-active { color: var(--gold); }
@@ -971,11 +974,11 @@ window.__I={
     <ul>
       <li><a href="#" onclick="showHome();return false;" data-en="🏠 Home" data-es="🏠 Inicio">🏠 Home</a></li>
       <li><a href="#" onclick="showSection('offers');return false;" data-en="🏷️ Offers" data-es="🏷️ Ofertas">🏷️ Offers</a></li>
-      <li><a href="#" onclick="showSection('services');return false;" data-en="Services" data-es="Servicios">Services</a></li>
-      <li><a href="#" onclick="showSection('info');return false;" data-en="Hours & Contact" data-es="Horarios">Hours & Contact</a></li>
-      <li><a href="#" onclick="showSection('about');return false;" data-en="About Us" data-es="Nosotros">About Us</a></li>
-      <li><a href="#" onclick="showSection('international');return false;" data-en="International" data-es="Internacional">International</a></li>
-      <li><a href="#" onclick="showSection('gallery');return false;" data-en="Gallery" data-es="Galería">Gallery</a></li>
+      <li><a href="#" onclick="showSection('services');return false;" data-en="🛒 Services" data-es="🛒 Servicios">🛒 Services</a></li>
+      <li><a href="#" onclick="showSection('info');return false;" data-en="🕐 Hours & Contact" data-es="🕐 Horarios">🕐 Hours & Contact</a></li>
+      <li><a href="#" onclick="showSection('about');return false;" data-en="ℹ️ About Us" data-es="ℹ️ Nosotros">ℹ️ About Us</a></li>
+      <li><a href="#" onclick="showSection('international');return false;" data-en="🌎 International" data-es="🌎 Internacional">🌎 International</a></li>
+      <li><a href="#" onclick="showSection('gallery');return false;" data-en="📸 Gallery" data-es="📸 Galería">📸 Gallery</a></li>
       <li><a href="#" onclick="showSection('reviews');return false;" data-en="⭐ Reviews" data-es="⭐ Reseñas" style="color:#F5C518;">⭐ Reviews</a></li>
     </ul>
     <div class="ham-social">
@@ -1395,7 +1398,7 @@ window.__I={
 </div>
 
 <!-- HOURS & CONTACT -->
-<section id="info" class="page-section">
+<section id="info" class="home-section">
   <div class="container">
     <p class="section-label" data-en="Find Us" data-es="Encuéntranos">Find Us</p>
     <h2 class="section-title" data-en-html="Hours & <span>Contact</span>" data-es-html="Horarios y <span>Contacto</span>">Hours & <span>Contact</span></h2>
@@ -1404,12 +1407,12 @@ window.__I={
         <h3 data-en="🕐 Store Hours" data-es="🕐 Horarios de la Tienda">🕐 Store Hours</h3>
         <table class="hours-table" id="hours-table">
           <tbody>
-            <tr><td data-en="Monday" data-es="Lunes">Monday</td><td>7:00 AM – 10:00 PM</td></tr>
-            <tr><td data-en="Tuesday" data-es="Martes">Tuesday</td><td>7:00 AM – 10:00 PM</td></tr>
-            <tr><td data-en="Wednesday" data-es="Miércoles">Wednesday</td><td>7:00 AM – 10:00 PM</td></tr>
-            <tr><td data-en="Thursday" data-es="Jueves">Thursday</td><td>7:00 AM – 10:00 PM</td></tr>
-            <tr><td data-en="Friday" data-es="Viernes">Friday</td><td>7:00 AM – 10:00 PM</td></tr>
-            <tr><td data-en="Saturday" data-es="Sábado">Saturday</td><td>7:00 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Monday" data-es="Lunes">Monday</td><td>6:30 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Tuesday" data-es="Martes">Tuesday</td><td>6:30 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Wednesday" data-es="Miércoles">Wednesday</td><td>6:30 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Thursday" data-es="Jueves">Thursday</td><td>6:30 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Friday" data-es="Viernes">Friday</td><td>6:30 AM – 10:00 PM</td></tr>
+            <tr><td data-en="Saturday" data-es="Sábado">Saturday</td><td>6:30 AM – 10:00 PM</td></tr>
             <tr><td data-en="Sunday" data-es="Domingo">Sunday</td><td>7:00 AM – 9:00 PM</td></tr>
           </tbody>
         </table>
@@ -1439,7 +1442,7 @@ window.__I={
 </section>
 
 <!-- DIRECTIONS -->
-<div id="map-section" class="page-section">
+<div id="map-section" class="home-section">
   <div class="directions-block">
     <div class="directions-content">
       <p class="section-label" style="color:var(--gold);" data-en="Get Here" data-es="Cómo Llegar">Get Here</p>
@@ -1463,7 +1466,7 @@ window.__I={
 </div>
 
 <!-- FOOTER -->
-<footer class="page-section" id="footer-section">
+<footer class="home-section" id="footer-section">
   <span class="footer-logo">Price Choice Supermarket</span>
   <div class="social-links">
     <a href="https://www.instagram.com/pricechoiceovertowndowntown?igsh=cTR0eWZ0Ym00emtj" target="_blank" class="social-btn instagram">
@@ -2214,23 +2217,35 @@ window.__I={
 })();
 
 /* PAGE NAVIGATION */
-var ALL_SECTIONS = ['services','international','offers','gallery','about','reviews','info','map-section','footer-section'];
+var ALL_SECTIONS = ['services','international','offers','gallery','about','reviews'];
+var HOME_SECTIONS = ['info','map-section','footer-section'];
 
 function showSection(id) {
+  // Hide hero + ticker
   document.querySelector('.hero').style.display = 'none';
   document.querySelector('.ticker-wrap').style.display = 'none';
+  // Hide all page sections
   ALL_SECTIONS.forEach(function(s) {
     var el = document.getElementById(s);
     if (el) el.classList.remove('active');
   });
+  // Hide home-only sections (hours, map, footer)
+  HOME_SECTIONS.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.add('hidden');
+  });
+  // Show target section
   var target = document.getElementById(id);
   if (target) target.classList.add('active');
+  // If navigating to hours, show the home sections instead
   if (id === 'info') {
-    var map = document.getElementById('map-section');
-    var foot = document.getElementById('footer-section');
-    if (map) map.classList.add('active');
-    if (foot) foot.classList.add('active');
+    target.classList.remove('active');
+    HOME_SECTIONS.forEach(function(s) {
+      var el = document.getElementById(s);
+      if (el) el.classList.remove('hidden');
+    });
   }
+  // Update active nav link
   document.querySelectorAll('.ham-dropdown ul li a, .nav-links a').forEach(function(a) {
     a.classList.remove('nav-active');
     if (a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'"+id+"'") !== -1) {
@@ -2245,12 +2260,20 @@ function showSection(id) {
 }
 
 function showHome() {
+  // Show hero + ticker
   document.querySelector('.hero').style.display = '';
   document.querySelector('.ticker-wrap').style.display = '';
+  // Hide all page sections
   ALL_SECTIONS.forEach(function(s) {
     var el = document.getElementById(s);
     if (el) el.classList.remove('active');
   });
+  // Show home sections (hours, map, footer)
+  HOME_SECTIONS.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.remove('hidden');
+  });
+  // Clear active nav
   document.querySelectorAll('.ham-dropdown ul li a, .nav-links a').forEach(function(a) {
     a.classList.remove('nav-active');
   });
