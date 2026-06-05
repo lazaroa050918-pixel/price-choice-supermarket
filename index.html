@@ -246,6 +246,13 @@
       .hamburger-btn { display: flex; }
     }
 
+    /* PAGE SECTIONS - hidden by default, shown via menu */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+    .nav-logo { cursor: pointer; }
+    /* active nav link highlight */
+    .ham-dropdown ul li a.nav-active { color: var(--gold); }
+
     /* HERO */
     .hero { background: var(--black); min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 4rem 2rem; }
     .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(29,110,46,0.35) 0%, transparent 70%), radial-gradient(ellipse 80% 40% at 50% -10%, rgba(245,197,24,0.15) 0%, transparent 70%); pointer-events: none; }
@@ -922,14 +929,14 @@ window.__I={
 
 <!-- NAVBAR -->
 <nav>
-  <div class="nav-logo">Price<br>Choice</div>
+  <div class="nav-logo" onclick="showHome()">Price<br>Choice</div>
   <div class="nav-links-wrap">
     <ul class="nav-links">
-      <li><a href="#reviews" data-en="⭐ Reviews" data-es="⭐ Reseñas" style="color:#F5C518;font-weight:900;">⭐ Reviews</a></li>
-      <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
-      <li><a href="#info" data-en="Hours" data-es="Horarios">Hours</a></li>
-      <li><a href="#about" data-en="About" data-es="Nosotros">About</a></li>
-      <li><a href="#offers" data-en="Offers" data-es="Ofertas">Offers</a></li>
+      <li><a href="#" onclick="showSection('reviews');return false;" data-en="⭐ Reviews" data-es="⭐ Reseñas" style="color:#F5C518;font-weight:900;">⭐ Reviews</a></li>
+      <li><a href="#" onclick="showSection('services');return false;" data-en="Services" data-es="Servicios">Services</a></li>
+      <li><a href="#" onclick="showSection('info');return false;" data-en="Hours" data-es="Horarios">Hours</a></li>
+      <li><a href="#" onclick="showSection('about');return false;" data-en="About" data-es="Nosotros">About</a></li>
+      <li><a href="#" onclick="showSection('offers');return false;" data-en="Offers" data-es="Ofertas">Offers</a></li>
       <li>
         <a href="https://www.instagram.com/pricechoiceovertowndowntown?igsh=cTR0eWZ0Ym00emtj" target="_blank" title="Instagram" style="display:flex;align-items:center;padding:4px;">
           <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill:url(#igGrad);flex-shrink:0;">
@@ -962,13 +969,14 @@ window.__I={
   <!-- Dropdown menu -->
   <div class="ham-dropdown" id="hamDropdown">
     <ul>
-      <li><a href="#reviews" data-en="⭐ Reviews" data-es="⭐ Reseñas" style="color:#F5C518;">⭐ Reviews</a></li>
-      <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
-      <li><a href="#info" data-en="Hours" data-es="Horarios">Hours</a></li>
-      <li><a href="#about" data-en="About" data-es="Nosotros">About</a></li>
-      <li><a href="#offers" data-en="Offers" data-es="Ofertas">Offers</a></li>
-      <li><a href="#international" data-en="International" data-es="Internacional">International</a></li>
-      <li><a href="#gallery" data-en="Gallery" data-es="Galería">Gallery</a></li>
+      <li><a href="#" onclick="showHome();return false;" data-en="🏠 Home" data-es="🏠 Inicio">🏠 Home</a></li>
+      <li><a href="#" onclick="showSection('offers');return false;" data-en="🏷️ Offers" data-es="🏷️ Ofertas">🏷️ Offers</a></li>
+      <li><a href="#" onclick="showSection('services');return false;" data-en="Services" data-es="Servicios">Services</a></li>
+      <li><a href="#" onclick="showSection('info');return false;" data-en="Hours & Contact" data-es="Horarios">Hours & Contact</a></li>
+      <li><a href="#" onclick="showSection('about');return false;" data-en="About Us" data-es="Nosotros">About Us</a></li>
+      <li><a href="#" onclick="showSection('international');return false;" data-en="International" data-es="Internacional">International</a></li>
+      <li><a href="#" onclick="showSection('gallery');return false;" data-en="Gallery" data-es="Galería">Gallery</a></li>
+      <li><a href="#" onclick="showSection('reviews');return false;" data-en="⭐ Reviews" data-es="⭐ Reseñas" style="color:#F5C518;">⭐ Reviews</a></li>
     </ul>
     <div class="ham-social">
       <a href="https://www.instagram.com/pricechoiceovertowndowntown?igsh=cTR0eWZ0Ym00emtj" target="_blank" title="Instagram">
@@ -1009,8 +1017,8 @@ window.__I={
   <h1 data-en-html="Fresh Picks,<span>Best Prices.</span>" data-es-html="Frescura del día,<span>Mejores Precios.</span>">Fresh Picks,<span>Best Prices.</span></h1>
   <p class="hero-sub" data-en="Your supermarket in the heart of Overtown" data-es="Tu supermercado en el corazón de Overtown">Your supermarket in the heart of Overtown</p>
   <div class="hero-cta">
-    <a href="#offers" class="btn-primary" data-en="Weekly Offers" data-es="Ofertas Semanales">Weekly Offers</a>
-    <a href="#info" class="btn-secondary" data-en="Hours & Contact" data-es="Horarios y Contacto">Hours & Contact</a>
+    <a href="#" onclick="showSection('offers');return false;" class="btn-primary" data-en="Weekly Offers" data-es="Ofertas Semanales">Weekly Offers</a>
+    <a href="#" onclick="showSection('info');return false;" class="btn-secondary" data-en="Hours & Contact" data-es="Horarios y Contacto">Hours & Contact</a>
   </div>
 </section>
 
@@ -1027,7 +1035,7 @@ window.__I={
 </div>
 
 <!-- SERVICES -->
-<section id="services">
+<section id="services" class="page-section">
   <div class="container">
     <p class="section-label" data-en="Everything You Need" data-es="Todo Lo Que Necesitas">Everything You Need</p>
     <h2 class="section-title" data-en-html="Our <span>Services</span>" data-es-html="Nuestros <span>Servicios</span>">Our <span>Services</span></h2>
@@ -1141,7 +1149,7 @@ window.__I={
 </section>
 
 <!-- INTERNATIONAL AISLE -->
-<section id="international">
+<section id="international" class="page-section">
   <div class="intl-glow"></div>
   <div class="container" style="position:relative;z-index:1;">
     <p class="section-label" style="color:var(--gold);" data-en="Only at Price Choice" data-es="Solo en Price Choice">Only at Price Choice</p>
@@ -1172,7 +1180,7 @@ window.__I={
 </section>
 
 <!-- WEEKLY OFFERS -->
-<section id="offers">
+<section id="offers" class="page-section">
   <div class="container">
     <p class="section-label" data-en="This Week" data-es="Esta Semana">This Week</p>
     <h2 class="section-title" data-en-html="Weekly <span>Specials</span>" data-es-html="Ofertas <span>Semanales</span>">Weekly <span>Specials</span></h2>
@@ -1233,7 +1241,7 @@ window.__I={
 </section>
 
 <!-- GALLERY -->
-<section id="gallery">
+<section id="gallery" class="page-section">
   <div class="container">
     <p class="section-label" data-en="Inside Our Store" data-es="Dentro de Nuestra Tienda">Inside Our Store</p>
     <h2 class="section-title" data-en-html="Photo <span>Gallery</span>" data-es-html="Galería de <span>Fotos</span>">Photo <span>Gallery</span></h2>
@@ -1289,7 +1297,7 @@ window.__I={
 
 
 <!-- ABOUT US -->
-<section id="about">
+<section id="about" class="page-section">
   <div class="container">
     <p class="section-label" data-en="Our Story" data-es="Nuestra Historia">Our Story</p>
     <h2 class="section-title" data-en-html="About <span>Us</span>" data-es-html="Sobre <span>Nosotros</span>">About <span>Us</span></h2>
@@ -1325,7 +1333,7 @@ window.__I={
 </section>
 
 <!-- REVIEWS -->
-<section id="reviews">
+<section id="reviews" class="page-section">
   <div class="container">
     <p class="section-label" data-en="What People Say" data-es="Lo Que Dicen">What People Say</p>
     <h2 class="section-title" data-en-html="Customer <span>Reviews</span>" data-es-html="Reseñas de <span>Clientes</span>">Customer <span>Reviews</span></h2>
@@ -1387,7 +1395,7 @@ window.__I={
 </div>
 
 <!-- HOURS & CONTACT -->
-<section id="info">
+<section id="info" class="page-section">
   <div class="container">
     <p class="section-label" data-en="Find Us" data-es="Encuéntranos">Find Us</p>
     <h2 class="section-title" data-en-html="Hours & <span>Contact</span>" data-es-html="Horarios y <span>Contacto</span>">Hours & <span>Contact</span></h2>
@@ -1431,7 +1439,7 @@ window.__I={
 </section>
 
 <!-- DIRECTIONS -->
-<div id="map-section">
+<div id="map-section" class="page-section">
   <div class="directions-block">
     <div class="directions-content">
       <p class="section-label" style="color:var(--gold);" data-en="Get Here" data-es="Cómo Llegar">Get Here</p>
@@ -1455,7 +1463,7 @@ window.__I={
 </div>
 
 <!-- FOOTER -->
-<footer>
+<footer class="page-section" id="footer-section">
   <span class="footer-logo">Price Choice Supermarket</span>
   <div class="social-links">
     <a href="https://www.instagram.com/pricechoiceovertowndowntown?igsh=cTR0eWZ0Ym00emtj" target="_blank" class="social-btn instagram">
@@ -2204,6 +2212,54 @@ window.__I={
   })();
 
 })();
+
+/* PAGE NAVIGATION */
+var ALL_SECTIONS = ['services','international','offers','gallery','about','reviews','info','map-section','footer-section'];
+
+function showSection(id) {
+  document.querySelector('.hero').style.display = 'none';
+  document.querySelector('.ticker-wrap').style.display = 'none';
+  ALL_SECTIONS.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.remove('active');
+  });
+  var target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  if (id === 'info') {
+    var map = document.getElementById('map-section');
+    var foot = document.getElementById('footer-section');
+    if (map) map.classList.add('active');
+    if (foot) foot.classList.add('active');
+  }
+  document.querySelectorAll('.ham-dropdown ul li a, .nav-links a').forEach(function(a) {
+    a.classList.remove('nav-active');
+    if (a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'"+id+"'") !== -1) {
+      a.classList.add('nav-active');
+    }
+  });
+  window.scrollTo(0, 0);
+  var dropdown = document.getElementById('hamDropdown');
+  var hbtn = document.getElementById('hamburgerBtn');
+  if (dropdown) dropdown.classList.remove('open');
+  if (hbtn) hbtn.classList.remove('open');
+}
+
+function showHome() {
+  document.querySelector('.hero').style.display = '';
+  document.querySelector('.ticker-wrap').style.display = '';
+  ALL_SECTIONS.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.remove('active');
+  });
+  document.querySelectorAll('.ham-dropdown ul li a, .nav-links a').forEach(function(a) {
+    a.classList.remove('nav-active');
+  });
+  window.scrollTo(0, 0);
+  var dropdown = document.getElementById('hamDropdown');
+  var hbtn = document.getElementById('hamburgerBtn');
+  if (dropdown) dropdown.classList.remove('open');
+  if (hbtn) hbtn.classList.remove('open');
+}
 
 /* HAMBURGER MENU */
 (function() {
