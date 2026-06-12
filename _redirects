@@ -1,0 +1,4 @@
+# Force HTTPS and non-www
+http://pricechoicesupermarket.com/* https://pricechoicesupermarket.com/:splat 301!
+http://www.pricechoicesupermarket.com/* https://pricechoicesupermarket.com/:splat 301!
+https://www.pricechoicesupermarket.com/* https://pricechoicesupermarket.com/:splat 301!
