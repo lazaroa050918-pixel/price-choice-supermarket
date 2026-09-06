@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Price Choice — Panel de Administración</title>
+<style>
+  :root { --gold:#F5C518; --black:#111111; --green:#1D6E2E; --white:#fff; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,Segoe UI,Roboto,sans-serif; background:#0d0d0d; color:#fff; min-height:100vh; }
+
+  /* LOGIN */
+  #login { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; gap:1rem; }
+  .login-card { background:#191919; border:1px solid #2a2a2a; border-radius:18px; padding:2.2rem; width:100%; max-width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .login-card h1 { font-size:1.4rem; margin-bottom:0.3rem; }
+  .login-card .brand { color:var(--gold); font-weight:800; letter-spacing:1px; }
+  .login-card p.sub { color:#888; font-size:0.85rem; margin-bottom:1.5rem; }
+  label { display:block; font-size:0.8rem; color:#aaa; margin:0.9rem 0 0.35rem; }
+  input[type=email], input[type=password] { width:100%; padding:0.8rem 0.9rem; background:#0d0d0d; border:1px solid #333; border-radius:10px; color:#fff; font-size:0.95rem; }
+  input:focus { outline:none; border-color:var(--gold); }
+  .btn { width:100%; padding:0.85rem; border:none; border-radius:10px; font-weight:700; font-size:0.95rem; cursor:pointer; margin-top:1.3rem; transition:opacity 0.2s; }
+  .btn-primary { background:var(--gold); color:var(--black); }
+  .btn:hover { opacity:0.88; }
+  .btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .error { color:#ff6b6b; font-size:0.85rem; margin-top:0.9rem; min-height:1.1rem; }
+
+  /* DASHBOARD */
+  #dashboard { display:none; max-width:780px; margin:0 auto; padding:1.5rem 1.2rem 4rem; }
+  .topbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 0 1.5rem; border-bottom:1px solid #222; margin-bottom:1.8rem; }
+  .topbar .title { font-size:1.15rem; font-weight:800; }
+  .topbar .title span { color:var(--gold); }
+  .logout { background:none; border:1px solid #444; color:#bbb; padding:0.5rem 1rem; border-radius:30px; cursor:pointer; font-size:0.8rem; }
+  .logout:hover { border-color:var(--gold); color:var(--gold); }
+
+  .card { background:#191919; border:1px solid #262626; border-radius:16px; padding:1.6rem; margin-bottom:1.5rem; }
+  .card h2 { font-size:1.05rem; margin-bottom:0.3rem; }
+  .card .desc { color:#888; font-size:0.84rem; margin-bottom:1.2rem; }
+  .preview-wrap { background:#0d0d0d; border:1px dashed #333; border-radius:12px; padding:1rem; text-align:center; margin-bottom:1rem; min-height:120px; display:flex; align-items:center; justify-content:center; }
+  .preview-wrap img { max-width:100%; max-height:300px; border-radius:8px; }
+  .preview-wrap .empty { color:#666; font-size:0.85rem; }
+  .file-row { display:flex; gap:0.7rem; flex-wrap:wrap; align-items:center; }
+  .file-btn { background:#262626; border:1px solid #3a3a3a; color:#fff; padding:0.7rem 1.1rem; border-radius:10px; cursor:pointer; font-size:0.88rem; }
+  .file-btn:hover { border-color:var(--gold); }
+  input[type=file] { display:none; }
+  .save-btn { background:var(--green); color:#fff; border:none; padding:0.7rem 1.4rem; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.88rem; }
+  .save-btn:hover { opacity:0.9; }
+  .save-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .status { font-size:0.82rem; margin-top:0.8rem; min-height:1.1rem; }
+  .status.ok { color:#4ade80; }
+  .status.err { color:#ff6b6b; }
+  .status.load { color:var(--gold); }
+
+  /* toggle */
+  .toggle-row { display:flex; align-items:center; justify-content:space-between; background:#0d0d0d; border:1px solid #2a2a2a; border-radius:12px; padding:1rem 1.2rem; margin-bottom:1.2rem; }
+  .toggle-row .lbl { font-weight:700; font-size:0.95rem; }
+  .toggle-row .lbl small { display:block; color:#888; font-weight:400; font-size:0.78rem; margin-top:0.2rem; }
+  .switch { position:relative; width:52px; height:30px; flex-shrink:0; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider { position:absolute; inset:0; background:#444; border-radius:30px; transition:0.3s; cursor:pointer; }
+  .slider::before { content:""; position:absolute; height:22px; width:22px; left:4px; top:4px; background:#fff; border-radius:50%; transition:0.3s; }
+  .switch input:checked + .slider { background:var(--green); }
+  .switch input:checked + .slider::before { transform:translateX(22px); }
+  .muted { opacity:0.45; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login">
+  <div class="login-card">
+    <h1><span class="brand">Price Choice</span></h1>
+    <p class="sub">Panel de Administración</p>
+    <form id="loginForm">
+      <label for="email">Correo</label>
+      <input type="email" id="email" autocomplete="username" required>
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" autocomplete="current-password" required>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Entrar</button>
+      <div class="error" id="loginError"></div>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="title">Price <span>Choice</span> — Panel</div>
+    <button class="logout" id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <!-- MASTER OFFERS TOGGLE -->
+  <div class="card" style="border-color:rgba(245,197,24,0.45);">
+    <h2>🏷️ Ofertas Semanales</h2>
+    <p class="desc">Interruptor maestro. Si lo apagas, se ocultan de la página: el anuncio de bienvenida, la sección de ofertas y el botón "Offers" del menú.</p>
+    <div class="toggle-row">
+      <div class="lbl">¿Mostrar las ofertas en la página?<small>Apágalo si el mercado deja de hacer especiales semanales.</small></div>
+      <label class="switch"><input type="checkbox" id="offersToggle"><span class="slider"></span></label>
+    </div>
+    <div class="status" id="offersStatus"></div>
+  </div>
+
+  <!-- WEEKLY FLYER -->
+  <div class="card" id="weeklyCard">
+    <h2>📰 Flyer Semanal</h2>
+    <p class="desc">Sube la foto del flyer de la semana. Al guardar, se actualiza en la página automáticamente.</p>
+    <div class="preview-wrap" id="weeklyPreview"><span class="empty">Cargando…</span></div>
+    <div class="file-row">
+      <label class="file-btn" for="weeklyFile">📁 Elegir foto nueva</label>
+      <input type="file" id="weeklyFile" accept="image/*">
+      <button class="save-btn" id="weeklySave" disabled>Guardar flyer</button>
+    </div>
+    <div class="status" id="weeklyStatus"></div>
+  </div>
+
+  <!-- WEEKEND -->
+  <div class="card" id="weekendCard">
+    <h2>🎉 Ofertas de Fin de Semana</h2>
+    <p class="desc">Activa o desactiva las ofertas de fin de semana, y sube su foto.</p>
+    <div class="toggle-row">
+      <div class="lbl">¿Hay ofertas este fin de semana?<small>Si lo apagas, no se muestra en la página.</small></div>
+      <label class="switch"><input type="checkbox" id="weekendToggle"><span class="slider"></span></label>
+    </div>
+    <div id="weekendImgArea">
+      <div class="preview-wrap" id="weekendPreview"><span class="empty">Cargando…</span></div>
+      <div class="file-row">
+        <label class="file-btn" for="weekendFile">📁 Elegir foto del fin de semana</label>
+        <input type="file" id="weekendFile" accept="image/*">
+        <button class="save-btn" id="weekendSave" disabled>Guardar fin de semana</button>
+      </div>
+    </div>
+    <div class="status" id="weekendStatus"></div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCRASmsg_GBVp2v7-NZocZ25DDbgLg2XhI",
+    authDomain: "pricechoice-content.firebaseapp.com",
+    projectId: "pricechoice-content",
+    storageBucket: "pricechoice-content.firebasestorage.app",
+    messagingSenderId: "1044980785203",
+    appId: "1:1044980785203:web:e84cae348406690b59c346"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const $ = id => document.getElementById(id);
+  let pendingWeekly = null;   // base64 of new weekly flyer (not yet saved)
+  let pendingWeekend = null;  // base64 of new weekend flyer (not yet saved)
+
+  // ---- Image compression (keeps each image well under Firestore's 1MB limit) ----
+  function compressImage(file, maxW = 1080, quality = 0.72) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          let q = quality, dataUrl = canvas.toDataURL('image/jpeg', q);
+          // step down quality if still too big (~900KB cap)
+          while (dataUrl.length > 900000 && q > 0.35) {
+            q -= 0.1; dataUrl = canvas.toDataURL('image/jpeg', q);
+          }
+          if (dataUrl.length > 980000) { reject(new Error('La imagen es demasiado grande aún comprimida. Usa una foto más pequeña.')); return; }
+          resolve(dataUrl);
+        };
+        img.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('No se pudo abrir el archivo.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ---- AUTH ----
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('loginError').textContent = '';
+    $('loginBtn').disabled = true;
+    try {
+      await auth.signInWithEmailAndPassword($('email').value.trim(), $('password').value);
+    } catch (err) {
+      $('loginError').textContent = 'Correo o contraseña incorrectos.';
+    } finally {
+      $('loginBtn').disabled = false;
+    }
+  });
+
+  $('logoutBtn').addEventListener('click', () => auth.signOut());
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      $('login').style.display = 'none';
+      $('dashboard').style.display = 'block';
+      loadConfig();
+    } else {
+      $('login').style.display = 'flex';
+      $('dashboard').style.display = 'none';
+      $('password').value = '';
+    }
+  });
+
+  // ---- LOAD current config ----
+  async function loadConfig() {
+    try {
+      const weekly = await db.collection('config').doc('weekly').get();
+      const wImg = weekly.exists ? weekly.data().image : null;
+      renderPreview('weeklyPreview', wImg);
+
+      const weekend = await db.collection('config').doc('weekend').get();
+      const wk = weekend.exists ? weekend.data() : {};
+      $('weekendToggle').checked = !!wk.active;
+      renderPreview('weekendPreview', wk.image || null);
+      updateWeekendArea();
+
+      // Master offers switch (default ON if the document doesn't exist yet)
+      const offers = await db.collection('config').doc('offers').get();
+      const offersActive = offers.exists ? offers.data().active !== false : true;
+      $('offersToggle').checked = offersActive;
+      updateOffersArea();
+    } catch (err) {
+      $('weeklyStatus').className = 'status err';
+      $('weeklyStatus').textContent = 'Error al cargar: ' + err.message;
+    }
+  }
+  function updateOffersArea() {
+    const off = !$('offersToggle').checked;
+    $('weeklyCard').classList.toggle('muted', off);
+    $('weekendCard').classList.toggle('muted', off);
+  }
+  $('offersToggle').addEventListener('change', async () => {
+    updateOffersArea();
+    $('offersStatus').className = 'status load';
+    $('offersStatus').textContent = 'Guardando…';
+    try {
+      await db.collection('config').doc('offers').set({
+        active: $('offersToggle').checked,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      $('offersStatus').className = 'status ok';
+      $('offersStatus').textContent = $('offersToggle').checked
+        ? '✅ Ofertas ACTIVADAS: se muestran en la página.'
+        : '✅ Ofertas DESACTIVADAS: ocultas de la página (popup, sección y menú).';
+    } catch (err) {
+      $('offersStatus').className = 'status err';
+      $('offersStatus').textContent = 'Error: ' + err.message;
+    }
+  });
+  function renderPreview(id, dataUrl) {
+    const el = $(id);
+    if (dataUrl) el.innerHTML = '<img src="' + dataUrl + '" alt="preview">';
+    else el.innerHTML = '<span class="empty">Sin imagen todavía</span>';
+  }
+  function updateWeekendArea() {
+    $('weekendImgArea').classList.toggle('muted', !$('weekendToggle').checked);
+  }
+
+  // ---- WEEKLY flyer ----
+  $('weeklyFile').addEventListener('change', async e => {
+    const file = e.target.files[0]; if (!file) return;
+    $('weeklyStatus').className = 'status load';
+    $('weeklyStatus').textContent = 'Procesando imagen…';
+    try {
+      pendingWeekly = await compressImage(file);
+      renderPreview('weeklyPreview', pendingWeekly);
+      $('weeklySave').disabled = false;
+      $('weeklyStatus').textContent = 'Lista para guardar. Revisa la foto y dale "Guardar flyer".';
+    } catch (err) {
+      $('weeklyStatus').className = 'status err';
+      $('weeklyStatus').textContent = err.message;
+    }
+  });
+  $('weeklySave').addEventListener('click', async () => {
+    if (!pendingWeekly) return;
+    $('weeklySave').disabled = true;
+    $('weeklyStatus').className = 'status load';
+    $('weeklyStatus').textContent = 'Guardando…';
+    try {
+      await db.collection('config').doc('weekly').set({
+        image: pendingWeekly,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      pendingWeekly = null;
+      $('weeklyStatus').className = 'status ok';
+      $('weeklyStatus').textContent = '✅ Flyer guardado. Ya está en vivo en la página.';
+    } catch (err) {
+      $('weeklySave').disabled = false;
+      $('weeklyStatus').className = 'status err';
+      $('weeklyStatus').textContent = 'Error al guardar: ' + err.message;
+    }
+  });
+
+  // ---- WEEKEND ----
+  $('weekendToggle').addEventListener('change', async () => {
+    updateWeekendArea();
+    $('weekendStatus').className = 'status load';
+    $('weekendStatus').textContent = 'Guardando…';
+    try {
+      await db.collection('config').doc('weekend').set({
+        active: $('weekendToggle').checked,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      $('weekendStatus').className = 'status ok';
+      $('weekendStatus').textContent = $('weekendToggle').checked
+        ? '✅ Ofertas de fin de semana ACTIVADAS.'
+        : '✅ Ofertas de fin de semana DESACTIVADAS.';
+    } catch (err) {
+      $('weekendStatus').className = 'status err';
+      $('weekendStatus').textContent = 'Error: ' + err.message;
+    }
+  });
+  $('weekendFile').addEventListener('change', async e => {
+    const file = e.target.files[0]; if (!file) return;
+    $('weekendStatus').className = 'status load';
+    $('weekendStatus').textContent = 'Procesando imagen…';
+    try {
+      pendingWeekend = await compressImage(file);
+      renderPreview('weekendPreview', pendingWeekend);
+      $('weekendSave').disabled = false;
+      $('weekendStatus').textContent = 'Lista para guardar. Dale "Guardar fin de semana".';
+    } catch (err) {
+      $('weekendStatus').className = 'status err';
+      $('weekendStatus').textContent = err.message;
+    }
+  });
+  $('weekendSave').addEventListener('click', async () => {
+    if (!pendingWeekend) return;
+    $('weekendSave').disabled = true;
+    $('weekendStatus').className = 'status load';
+    $('weekendStatus').textContent = 'Guardando…';
+    try {
+      await db.collection('config').doc('weekend').set({
+        image: pendingWeekend,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      pendingWeekend = null;
+      $('weekendStatus').className = 'status ok';
+      $('weekendStatus').textContent = '✅ Foto de fin de semana guardada.';
+    } catch (err) {
+      $('weekendSave').disabled = false;
+      $('weekendStatus').className = 'status err';
+      $('weekendStatus').textContent = 'Error al guardar: ' + err.message;
+    }
+  });
+</script>
+</body>
+</html>
